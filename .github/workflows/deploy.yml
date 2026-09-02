@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: 'main' # Déclenche le déploiement à chaque push sur main
+    branches: [main]
 
 permissions:
   contents: read
@@ -13,7 +13,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps: deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,19 +22,22 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-modules: 'true'
-          cache: 'npm' # Changez par yarn ou pnpm si nécessaire
+          node-version: 20
+          cache: 'npm'
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build project
-        run: npm run build # Vite compile le TypeScript en JavaScript ici
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist' # Dossier contenant le site compilé par Vite
+          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
