@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
         <div className="space-y-1 text-center md:text-left flex flex-col md:flex-row items-center gap-3">
           <div className="w-8 h-8 rounded-lg overflow-hidden border border-slate-300 dark:border-sky-500/40 bg-slate-950 flex-shrink-0">
             <img
-              src="/icon.jpg"
+              src="icon.jpg"
               alt="Logo"
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover"

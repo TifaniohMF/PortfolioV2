@@ -62,7 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCV, onOpenSearch }) => {
         >
           <div className="w-9 h-9 rounded-xl overflow-hidden border shadow-sm transition-transform duration-300 group-hover:scale-105 border-slate-300 dark:border-sky-500/40 bg-slate-950 flex-shrink-0">
             <img
-              src="/icon.jpg"
+              src="icon.jpg"
               alt="Logo RANDRIANOELINA"
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover"
