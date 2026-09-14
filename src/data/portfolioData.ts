@@ -409,7 +409,7 @@ public:
     sampleCode: {
       language: "latex",
       filename: "crible.tex",
-      code: `\documentclass[a4paper, 12pt, french]{report}
+      code: String.raw`\documentclass[a4paper, 12pt, french]{report}
 
 % ========================
 % IMPORTATION DES PACKAGES
