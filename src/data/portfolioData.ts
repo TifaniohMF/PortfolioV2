@@ -68,30 +68,30 @@ export const getSkillCategories = (lang: 'en' | 'fr'): SkillCategory[] => [
       {
         name: lang === 'fr' ? "Algèbre linéaire numérique" : "Numerical Linear Algebra",
         subtext: lang === 'fr'
-          ? "Espaces vectoriels, décompositions matricielles (LU, Cholesky, QR, SVD), valeurs & vecteurs propres, conditionnement."
-          : "Vector spaces, matrix factorizations (LU, Cholesky, QR, SVD), eigenvalues & eigenvectors, conditioning.",
-        tags: ["Matrices", "LU / Cholesky", "Spectral Theory", "SVD"]
+          ? "Espaces vectoriels, décompositions matricielles (LU, Cholesky, QR), valeurs & vecteurs propres, conditionnement."
+          : "Vector spaces, matrix factorizations (LU, Cholesky, QR), eigenvalues & eigenvectors, conditioning.",
+        tags: ["Matrices", "LU / Cholesky", "Spectral Theory"]
       },
       {
         name: lang === 'fr' ? "Analyse numérique & Convergence" : "Numerical Analysis & Convergence",
         subtext: lang === 'fr'
-          ? "Méthodes itératives (Jacobi, Gauss-Seidel), discrétisation, analyse d'erreur résiduelle, stabilité numérique."
-          : "Iterative methods (Jacobi, Gauss-Seidel), discretization, residual error analysis, numerical stability.",
+          ? "Méthodes itératives, discrétisation, analyse d'erreur résiduelle, stabilité numérique."
+          : "Iterative methods, discretization, residual error analysis, numerical stability.",
         tags: ["Residual Error", "Stability", "Interpolation"]
       },
       {
         name: lang === 'fr' ? "Optimisation mathématique" : "Mathematical Optimization",
         subtext: lang === 'fr'
-          ? "Optimisation sous contraintes (Lagrange, KKT), descente de gradient, programmation linéaire et convexe."
-          : "Constrained optimization (Lagrange, KKT), gradient descent, linear and convex programming.",
-        tags: ["Gradient", "Convexity", "Duality", "KKT"]
+          ? "Optimisation sous contraintes, descente de gradient, programmation linéaire et convexe."
+          : "Constrained optimization, gradient descent, linear and convex programming.",
+        tags: ["Gradient", "Convexity", "Duality"]
       },
       {
         name: lang === 'fr' ? "Probabilités & Statistique" : "Probability & Statistics",
         subtext: lang === 'fr'
-          ? "Lois de probabilité usuelles, inférence statistique, chaînes de Markov et modélisation stochastique."
-          : "Standard distributions, statistical inference, Markov chains, and stochastic modeling.",
-        tags: ["Inference", "Markov Chains", "Sampling"]
+          ? "Lois de probabilité usuelles, inférence statistique, et modélisation."
+          : "Standard distributions, statistical inference, and modeling.",
+        tags: ["Inference", "Sampling"]
       },
       {
         name: lang === 'fr' ? "Analyse réelle et complexe" : "Real & Complex Analysis",
@@ -147,11 +147,11 @@ export const getSkillCategories = (lang: 'en' | 'fr'): SkillCategory[] => [
     accentColor: "gold",
     items: [
       {
-        name: "Linux (GNU/POSIX)",
+        name: "Linux",
         subtext: lang === 'fr'
           ? "Commandes Shell / Bash, automatisation par scripts, compilation GCC/Clang, gestionnaire de paquets."
-          : "Shell / Bash scripting, GCC/Clang compilation toolchain, POSIX utilities, system administration.",
-        tags: ["Bash", "POSIX", "GCC / GDB", "Automation"]
+          : "Shell / Bash scripting, system administration.",
+        tags: ["Bash", "Automation"]
       },
       {
         name: "Git & GitHub",
@@ -210,26 +210,30 @@ export const getProjects = (lang: 'en' | 'fr'): Project[] => [
     },
     sampleCode: {
       language: "python",
-      filename: "solver_lu.py",
+      filename: "lu.py",
       code: `import numpy as np
 
-def lu_decomposition(A):
+def decomposition_lu(A):
     """
-    Décomposition LU d'une matrice carrée A.
+    Décomposition LU d'une matrice carré
     """
-    n = A.shape[0]
-    L = np.eye(n)
-    U = A.copy().astype(float)
-    
-    for k in range(n - 1):
-        for i in range(k + 1, n):
-            if U[k, k] == 0:
-                continue
-            factor = U[i, k] / U[k, k]
-            L[i, k] = factor
-            U[i, k:] -= factor * U[k, k:]
-            
-    return L, U`
+    n = len(A)
+    # Init : L with 1 in diagonal, U with 0
+    L = np.eye(n) 
+    U = np.zeros((n,n))
+    for i in range(n):
+        # Calculation  rows i of U
+        for k in range(i,n):
+            s1 = sum(L[i][j]*U[j][k] for j in range(i))
+            U[i][k] = A[i][k] - s1
+        
+        # Calculation L
+        for k in range(i+1, n):
+            s2 = sum(L[k][j]*U[j][i] for j in range(i))
+            if U[i][i] == 0:
+                raise ValueError("Zero pivot encountered")
+            L[k][i] = (A[k][i] - s2)/U[i][i]
+    return L,U`
     },
     theoreticalNotes: lang === 'fr'
       ? "Permet de résoudre le système en deux étapes triangulaires simples : Ly = b (descente) puis Ux = y (remontée)."
@@ -245,7 +249,7 @@ def lu_decomposition(A):
       ? "Programmes en Python et C++ pour trouver les racines approchées d'équations non linéaires à une variable : méthode de dichotomie, méthode de Newton-Raphson, méthode de la sécante et méthode du point fixe."
       : "Python and C++ implementations of standard 1D root-finding methods: bisection (dichotomy), Newton-Raphson, secant method, and fixed-point iteration.",
     mathTopic: lang === 'fr' ? "Analyse numérique" : "Numerical Analysis",
-    technologies: ["Python", "C++", "Analyse Numérique"],
+    technologies: ["Python", "Analyse Numérique"],
     githubUrl: "https://github.com/TifaniohMF/ResolutionEquationNonLineaire",
     iconName: "Activity",
     keyFeatures: lang === 'fr' ? [
@@ -265,33 +269,43 @@ def lu_decomposition(A):
       space: "O(1)"
     },
     sampleCode: {
-      language: "cpp",
-      filename: "newton.cpp",
-      code: `#include <iostream>
-#include <cmath>
-#include <functional>
+      language: "python",
+      filename: "newton.py",
+      code: `def method_newton(f, df, x0, tol=1e-10, max_iter=100):
+    """
+    Résout f(x) = 0 par la méthode de Newton.
 
-double newton_raphson(
-    const std::function<double(double)>& f,
-    const std::function<double(double)>& df,
-    double x0,
-    double tol = 1e-7,
-    int max_iter = 100
-) {
-    double x = x0;
-    for (int i = 0; i < max_iter; ++i) {
-        double fx = f(x);
-        double dfx = df(x);
-        if (std::abs(dfx) < 1e-12) break;
-        
-        double x_next = x - (fx / dfx);
-        if (std::abs(x_next - x) < tol) {
-            return x_next;
-        }
-        x = x_next;
-    }
-    return x;
-}`
+    Paramètres :
+    - f : fonction à résoudre
+    - df : dérivée de f
+    - x0 : valeur initiale
+    - tol : tolérance sur la différence successive
+    - max_iter : nombre maximum d'itérations
+
+    Retourne :
+    - Liste des approximations successives
+    """
+    x_vals = [x0]
+    for i in range(max_iter):
+        x = x_vals[-1]
+        fx = f(x)
+        dfx = df(x)
+
+        if dfx == 0:
+            raise ValueError("Dérivée nulle à x = {}. Méthode de Newton échoue.".format(x))
+
+        x_new = x - fx / dfx
+        x_vals.append(x_new)
+
+        print(f"Étape {i+1} : x = {x_new:.6f}, f(x) = {f(x_new):.6f}")
+
+        if abs(x_new - x) < tol:
+            break
+
+    else:
+        raise RuntimeError("La méthode n'a pas convergé après {} itérations.".format(max_iter))
+
+    return x_vals`
     },
     theoreticalNotes: lang === 'fr'
       ? "La méthode de Newton utilise la dérivée pour converger rapidement vers la racine lorsque l'estimation initiale est proche."
@@ -304,10 +318,10 @@ double newton_raphson(
       ? "Opérations et calculs sur les polynômes"
       : "Polynomial Operations & Horner Evaluation",
     description: lang === 'fr'
-      ? "Implémentation d'une structure de polynômes en C++ et Python pour gérer les opérations de base : addition, multiplication, calcul de la dérivée et évaluation efficace par la méthode de Horner."
-      : "C++ and Python code for polynomial operations: addition, multiplication, formal differentiation, and Horner evaluation.",
+      ? "Implémentation d'une structure de polynômes en Python pour gérer les opérations de base : addition, multiplication, calcul de la dérivée et évaluation efficace par la méthode de Horner."
+      : "Python code for polynomial operations: addition, multiplication, formal differentiation, and Horner evaluation.",
     mathTopic: lang === 'fr' ? "Algèbre & Calcul" : "Algebra & Polynomials",
-    technologies: ["C++", "Python", "Algorithmique"],
+    technologies: ["Python", "Algorithmique"],
     githubUrl: "https://github.com/TifaniohMF/Polynomial",
     iconName: "FunctionSquare",
     keyFeatures: lang === 'fr' ? [
@@ -393,21 +407,164 @@ public:
       space: "Dépôt GitHub organisé"
     },
     sampleCode: {
-      language: "python",
-      filename: "crible.py",
-      code: `def crible_eratosthene(n):
-    """
-    Renvoie la liste des nombres premiers <= n.
-    """
-    est_premier = [True] * (n + 1)
-    est_premier[0] = est_premier[1] = False
-    
-    for i in range(2, int(n**0.5) + 1):
-        if est_premier[i]:
-            for multiple in range(i * i, n + 1, i):
-                est_premier[multiple] = False
-                
-    return [p for p in range(2, n + 1) if est_premier[p]]`
+      language: "latex",
+      filename: "crible.tex",
+      code: `\documentclass[a4paper, 12pt, french]{report}
+
+% ========================
+% IMPORTATION DES PACKAGES
+% ========================
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2cm]{geometry}
+\usepackage{lmodern}
+\usepackage{theorem}
+\usepackage{amsfonts, amsmath, amssymb}
+\usepackage{babel}
+
+\pagestyle{headings}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\theoremstyle{break}
+\theoremheaderfont{\scshape}
+\theorembodyfont{\upshape}
+
+\newtheorem{defin}{Définition}[section]
+\newtheorem{prop}[defin]{Proposition}
+\newtheorem{theo}[defin]{Théorème}
+\newtheorem{coro}[defin]{Corollaire}
+
+
+\title{PROBABILITÉ}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\textbf{PRÉCISION} \\
+Ceci n'est pas à priori un book, cette document est un réceuille de note pour comprendre et approfondir mes connaissances en mathématiques.
+Ce document est crée à partir du language de programmation latex. Même si c'est un note si vous trouvez que cela peut vous être aider que ce soit dans vous exercice ou juste pour comprendre.
+Vous pouvez le consulter et même le télécharger.
+Mais je précise que, j'ai les reformuler moi même selon mes propres compréhension.
+
+\tableofcontents
+
+\chapter{ESPACE PROBABILISÉ}
+
+\section{Vocabulaire}
+
+\begin{center}
+	\begin{tabular}{|p{8cm}|p{3cm}|}
+	\hline
+	Vocabulaire & Notation \\ \hline
+	Résultat possible & $\omega$ \\
+	Tous les résultat possible & $\Omega$ \\
+	Évenement A & A \\
+	Évenement contraire & $A^{c}$ \\
+	Sous ensemble d'évenement & $A \subset \Omega$ \\
+	Événement certain & $\Omega$ \\
+	Évenement impossible & $\emptyset$ \\
+	Évenement A ou B (non exclusif) & $A \cup B$ \\
+	Évenement A et B & $A \cap B$ \\
+	\hline
+\end{tabular}
+\end{center}
+Prénons un exemple, si on lance un dé à 6 face. On a $\omega = 5$, $\Omega = \{1,2,3,4,5,6\}$, $A = \{1,3,5\}$.\\
+On dit que deux évenements sont incompatibles si $A \cap B = \emptyset$.
+
+\section{Probabilité}
+$\mathcal{F} = P(\Omega), \; \mathcal{F}$ est ici une partie de $\Omega$ où $\Omega$ est l'ensemble de tous les résultats possibles. $\mathcal{F}$ est appelé un tribus et ($\mathcal{F}, \Omega$) un espace mesurable.
+
+\begin{defin}
+	Une mesure de probabilité (ou probabilité) est une application P de $\mathcal{F}$ vers [0, 1] qui verifie les conditions suivantes:
+	\begin{enumerate}
+		\item P($\Omega$) = 1 et P($\emptyset$) = 0,
+		\item Soit $(A_{i})_{i \in \mathbb{N}}$ un collection de famille d'évenement finie ou dénombrable. Si les $A_{i}$ sont deux à deux disjoints, on a $P(\displaystyle\bigcup_{i \in  \mathbb{N}}A_{i}) = \displaystyle\sum_{i \in \mathbb{N}} P(A_{i})$ ($\sigma$-additivité)
+	\end{enumerate}
+	Le triplet $(\Omega, \mathcal{F}, P)$ est un espace de probabilité. On dit qu'un probabilité d'un évenement A est presque sûr si $P(A) = 1$, il est négligeable si $P(A)=0$.
+\end{defin} 
+
+\begin{prop}
+	\begin{enumerate}
+		\item $P(A^{c}) = 1 - P(A)$,
+		\item $P(A \cup B) = P(A) + P(B) - P(A \cap B)$,
+		\item Si $A \subset B$, alors $P(A) \leq P(B)$,
+		\item Soit $(A_{i})_{i \in \mathbb{N}}$ une famille d'évenement finie ou dénombrable deux à deux disjoints tel que $\displaystyle\sum_{i \in \mathbb{N}} P(A_{1}) = 1$. On a\\ $P(B) = \displaystyle\sum_{i \in \mathbb{N}} P(A_{i} \cap B)$ (\textbf{Formule de décomposition})
+	\end{enumerate}
+\end{prop}
+\textit{Preuve.}
+\begin{enumerate}
+	\item Montrons que $P(A^{c}) = 1 - P(A)$,\\
+	On sait que $A \cup A^{c} = \Omega$, Comme $A$ et $A^{c}$ sont disjoints. D'après $\sigma$-additivité, on a $P(A \cup A^{c}) = P(A) + P(A^{c})$. Or $P(A \cup A^{c})=P(\Omega)=1$. Donc $P(A^{c}) = 1 - P(A)$.
+	\item Montrons que $P(A \cup B) = P(A) + P(B) - P(A \cap B)$,\\
+		On peut décomposer $A \cup B$ comme suit, $A \cup B = A \cup (B \cap A^{c})$. A et $B \cap A^{c}$ sont disjoints. D'après $\sigma$-additivité, on a $P(A \cup (B \cap A^{c})) = P(A) + P(B \cap A^{c})$. En décomposant aussi B, on a $B = (B \cap A) \cup (B \cup A^{c})$. Par suit, on a $P(B) = P(B \cap A) \cup (B \cup A^{c}) = P(B \cap A) + P(B \cup A^{c})$. On a alors $P(B \cup A^{c}) = P(B) - P(A \cap B)$. D'où $P(A \cup B) = P(A) + P(B) - P(A \cap B)$.
+    \item Montrons que si $A \subset B$, alors $P(A) \leq P(B)$,\\
+     Supposons que $A \subset B$, considérons deux ensembles deux à deux disjoints A et B \textbackslash A. On a $B = A \cup (B \cap A^{c})$ (car par hypothèse $A \cup B = B$). Par suite $P(B) = P(A) + P(B \cap A^{c}$). Comme $P(B \cap A^{c}) \geq 0$. \\Donc on peut en conclure que $P(B)>P(A)$.
+     \item On peut écrire $B = B \cap \Omega =  B \cap (\displaystyle\bigcup_{i \in I} A_{i})$. D'après la distributivité on a $\displaystyle B = \bigcup_{i \in I} (B \cap A_{i})$. 
+     Comme les $A_{i}$ sont deux à deux disjoints alors ($B \cap A_{i}$) sont deux à deux disjoints. Donc on a $P(B) = P(\displaystyle\bigcup_{i} (B \cap A_{i}) = \displaystyle\sum_{i \in I} P(B \cap A_{i}))$.\\
+     D'où $\displaystyle P(B) = \displaystyle\sum_{i \in I} P(B \cap A_{i})$.  \marginpar{$\square$}
+\end{enumerate}
+
+\section{Probabilité sur des ensembles finie ou dénombrable}
+\begin{prop}
+     Pour tout $A \subset \mathcal{F}$, on a $P(A) = \displaystyle\sum_{\omega \in A} P(\{ \omega\})$.
+\end{prop}
+\textit{Preuve.}\\
+A peut s'écrire sous la forme $A = (A \cap \omega)_{\omega \in \Omega} = (A \cap \{\omega\})_{\omega \in A} \cup (A \cap \{\omega\})_{\omega \not\in A}$. Ces deux ensembles sont deux à deux disjoints. Donc d'après $\sigma$-additivité, on a
+$P(A) = P( (A \cap \{\omega\})_{\omega \in A} \cup (A \cap \{\omega\})_{\omega \not\in A}) = P((A \cap \{\omega\})_{\omega \in A}) + P((A \cap \{\omega\})_{\omega \not\in A}) = \displaystyle\sum_{\omega\in A} P(A \cap \{ \omega \}) + \displaystyle\sum_{\omega \not\in A} P(A \cap \{ \omega \}) = \sum_{\omega \in A} P(\{ \omega \})$.\\
+D'où $P(A) = \displaystyle\sum_{\omega \in A} P(\{ \omega\})$.
+
+\begin{defin}
+        $P(\{ \omega \}) = \frac{1}{|\Omega|}$
+\end{defin}
+
+\begin{coro}
+       $P(A) = \frac{|A|}{|\Omega|}$
+\end{coro}
+
+\section{Dénombrement}
+\begin{enumerate}
+       \item Le nombre de permutation de $\{1, 2, \cdots, n\}$ dans lui même est $n!$.
+       \item Le nombre d' arragement $A_{n}^{k} = \displaystyle\frac{n!}{(n-k)!}$.
+       \item Le coefficient binomial $C_{n}^{k} = \displaystyle\frac{n!}{k!(n-k)!}$.
+\end{enumerate}
+
+\section{Probabilité conditionnelle et Indépendance}
+\begin{defin}
+     $P(A | B) = \frac{P(A \cap B)}{P(B)}$
+\end{defin}
+
+\begin{prop}
+\textbf{Formule de décomposition :} $P(A) = P(A | B)P(B) + P(A | B^{c}) P(B^{c})$ \\
+\textbf{Formule de Bayes :} $ P(B | A) = \displaystyle\frac{P(A | B) P(B)}{P(A | B)P(B) + P(A | B^{c}) P(B^{c})}$
+\end{prop}
+
+\begin{defin}
+On dit que deux événements A et B sont indépendants si $P(A \cap B) = P(A)P(B)$
+\end{defin}
+Si deux événements A et B sont indépendants, alors la probabilité conditionnelle devient $P(A|B)=P(A)$.
+
+\chapter{VARIABLES ALÉATOIRES}
+\section{Exemple de loi}
+\subsection*{Loi de Bernouilli de paramètres p}
+$P(X=0) = 1-p$ et $P(X=1)=p$
+
+\subsection*{Loi uniforme}
+$P(X = k)=\displaystyle\frac{1}{N}$.
+
+\subsection*{Loi Binomiale}
+$P(X=k)= \left(\begin{array}{c} n \\ k\end{array}\right) p^{k}(1-p)^{n-k}$.
+
+\subsection*{Loi de poison de paramètres $\lambda$}
+$P(X=k)=e^{-\lambda} \frac{\lambda^{k}}{k!}$
+
+\subsection*{Loi géometrique de paramètres $\lambda$}
+$P(X=k)=(1-\lambda)^{k-1}\lambda$
+\end{document} `
     },
     theoreticalNotes: lang === 'fr'
       ? "Centralise les supports d'apprentissage et les programmes d'entraînement en mathématiques et informatique."
