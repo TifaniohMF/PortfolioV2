@@ -161,7 +161,7 @@ export const Contact: React.FC<ContactProps> = ({ onShowToast }) => {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="e.g. Dr. Ada Lovelace"
+                    placeholder="e.g. Fandresena Randria"
                     className="w-full px-3.5 py-2 text-xs font-mono rounded-xl border bg-white dark:bg-[#071527] border-slate-300 dark:border-sky-900/60 text-slate-900 dark:text-white placeholder:text-slate-500 focus:border-sky-600 outline-none"
                   />
                 </div>

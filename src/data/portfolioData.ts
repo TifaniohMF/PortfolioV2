@@ -387,7 +387,7 @@ public:
       ? "Dépôt regroupant des fiches de synthèse en LaTeX, des résumés de cours universitaires et de petits scripts Python/C pour tester des exercices d'arithmétique et d'analyse."
       : "Personal repository containing LaTeX revision sheets, university course notes, and small Python/C scripts for practicing math and algorithm exercises.",
     mathTopic: lang === 'fr' ? "Notes & Exercices" : "Notes & Practice",
-    technologies: ["LaTeX", "Python", "C++", "Markdown"],
+    technologies: ["LaTeX"],
     githubUrl: "https://github.com/TifaniohMF/MathArchive",
     iconName: "BookOpen",
     keyFeatures: lang === 'fr' ? [
