@@ -583,26 +583,22 @@ export const getEducationData = (lang: 'en' | 'fr'): EducationItem[] => [
       : "University of Antananarivo — Faculty of Science",
     location: "Antananarivo, Madagascar",
     description: lang === 'fr'
-      ? "Formation universitaire d'excellence combinant les mathématiques fondamentales (algèbre générale, analyse réelle et complexe, topologie, probabilités) et l'informatique fondamentale (algorithmique avancée, programmation système C/C++, architecture des ordinateurs, systèmes d'exploitation)."
-      : "Rigorous academic curriculum pairing foundational pure & applied mathematics (abstract algebra, real & complex analysis, topology, probability theory) with core computer science (advanced algorithms, C/C++ systems programming, computer architecture, Linux operating systems).",
+      ? "Formation universitaire d'excellence combinant les mathématiques fondamentales (algèbre générale, analyse réelle et complexe, topologie, probabilités, statistiques)."
+      : "Rigorous academic curriculum pairing foundational pure & applied mathematics (abstract algebra, real & complex analysis, topology, probability theory, statistcs).",
     coursework: lang === 'fr' ? [
       "Algèbre Linéaire Avancée, Espaces Vectoriels & Décompositions",
       "Analyse Numérique, Calcul Matriciel & Analyse d'Erreurs",
       "Analyse Réelle, Calcul Différentiel et Intégral, Topologie",
       "Probabilités, Statistique Mathématique & Processus Stochastiques",
       "Optimisation Mathématique & Recherche Opérationnelle",
-      "Algorithmique & Structures de Données en C/C++ et Python",
-      "Systèmes d'Exploitation Linux, Réseaux & Programmation Système",
-      "Rédaction Scientifique, LaTeX et Méthodes de Recherche"
+      "Algorithmique & Structures de Données en C/C++"
     ] : [
       "Advanced Linear Algebra, Vector Spaces & Matrix Decompositions",
       "Numerical Analysis, Matrix Computations & Error Estimation",
       "Real Analysis, Differential & Integral Calculus, Topology",
       "Probability Theory, Mathematical Statistics & Stochastic Processes",
       "Mathematical Optimization & Operations Research",
-      "Algorithms & Advanced Data Structures in C/C++ and Python",
-      "Linux Operating Systems, System Programming & Architecture",
-      "Scientific Typesetting, LaTeX Monograph Writing & Proof Methods"
+      "Algorithms & Advanced Data Structures in C/C++"
     ],
     isCurrent: true
   }
